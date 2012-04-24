@@ -307,7 +307,11 @@ namespace MoSync
 
                         mRuntime.PostCustomEvent(MoSync.Constants.EVENT_TYPE_WIDGET, eventData);
 
-                        if (!mFromHistory && (args.NavigationMode == NavigationMode.Forward || args.NavigationMode == NavigationMode.New)) mBackCounter++;
+                        if (!mFromHistory && (args.NavigationMode == NavigationMode.Forward || args.NavigationMode == NavigationMode.New))
+                        {
+                            mBackCounter++;
+                        }
+                        mFromHistory = false;
                     });
             }
         }
