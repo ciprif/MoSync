@@ -1,6 +1,0 @@
-.res FONT
-.bin
-.include "font.mof"
-
-.res BACK
-.image "cnnback.png"

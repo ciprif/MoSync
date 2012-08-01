@@ -1,2 +1,0 @@
-12:17 2006-11-09
-Normalize End-of-line characters.

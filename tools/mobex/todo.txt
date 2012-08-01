@@ -1,2 +1,0 @@
-17:41 2007-04-24
-Read max packet size and port number from command line.
