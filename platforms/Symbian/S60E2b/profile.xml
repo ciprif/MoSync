@@ -1,2 +1,0 @@
-<platform family="Symbian" variant="S60E2b" runtime="s60v2/2" inherit="Symbian/S60E2" abstract="true">
-</platform>

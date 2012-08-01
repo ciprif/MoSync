@@ -1,7 +1,0 @@
-
-#ifndef OSCL_EXCEPTION_H_INCLUDED
-#define OSCL_EXCEPTION_H_INCLUDED
-
-#define OSCL_LEAVE(i) throw int(i)
-
-#endif	//OSCL_MEM_H_INCLUDED
