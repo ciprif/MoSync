@@ -1,0 +1,4 @@
+<resources>
+	<image id="RES_BUTTON_CAMERA" resource="camera.png"/>
+	<image id="RES_BUTTON_FOLDER" resource="folder.png"/>
+</resources>
