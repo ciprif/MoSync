@@ -71,8 +71,8 @@ namespace Logical
 		void requestSaveSettings(bool isShowAll, bool isMonthly, bool isFromDate, const double& debtValue, const Model::DateStruct& date, const MAUtil::String& coin);
 	private:
 		void applySettings();
-		GUI::HomeScreen* _homeScreenRefference;
-		GUI::ListScreen* _listScreebRefference;
+		GUI::HomeScreen* _homeScreenReference;
+		GUI::ListScreen* _listScreenReference;
 		GUI::SettingsScreen* _settingsScreenReference;
 
 		Repositories::DBManager* _DBManager;

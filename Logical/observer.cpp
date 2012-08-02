@@ -31,8 +31,8 @@ namespace Logical
 
 	void Observer::setHomeScreenRef(GUI::HomeScreen* homeScreen)
 	{
-		_homeScreenRefference = homeScreen;
-		_homeScreenRefference->setObserver(this);
+		_homeScreenReference = homeScreen;
+		_homeScreenReference->setObserver(this);
 	}
 
 	void Observer::requestExpenseAddition(const double& amount, const MAUtil::String& category, const MAUtil::String& description,
@@ -47,9 +47,9 @@ namespace Logical
 		obj->setTime(time);
 
 		updateScreenNotification(obj->getAmount(), true, obj->getCategory());
-		if(NULL != _listScreebRefference)
+		if(NULL != _listScreenReference)
 		{
-			_listScreebRefference->addExpenseNotification(*obj);
+			_listScreenReference->addExpenseNotification(*obj);
 		}
 		_DBManager->addExpense(obj);
 		_consumedBudget = _DBManager->getConsumedBudget();
@@ -67,9 +67,9 @@ namespace Logical
 		obj->setTime(time);
 
 		updateScreenNotification(obj->getAmount(), false, "");
-		if(NULL != _listScreebRefference)
+		if(NULL != _listScreenReference)
 		{
-			_listScreebRefference->addIncomeNotification(*obj);
+			_listScreenReference->addIncomeNotification(*obj);
 		}
 		_DBManager->addIncome(obj);
 		_totalBudget = _DBManager->getTotalBudget();
@@ -77,7 +77,7 @@ namespace Logical
 
 	void Observer::updateScreenNotification(const double& value, bool isExpense, const MAUtil::String& category)
 	{
-		_homeScreenRefference->updateBudgetValues(value, isExpense, category);
+		_homeScreenReference->updateBudgetValues(value, isExpense, category);
 	}
 
 	void Observer::updateExpensesListNotification(const Model::ExpenseObject& obj)
@@ -115,18 +115,18 @@ namespace Logical
 
 	void Observer::updateTotalBudgetNotification()
 	{
-		_homeScreenRefference->updateTotalBudget(_totalBudget);
-		_homeScreenRefference->updateSimpleGraphic();
+		_homeScreenReference->updateTotalBudget(_totalBudget);
+		_homeScreenReference->updateSimpleGraphic();
 	}
 	void Observer::updateConsumedBudgetNotification()
 	{
-		_homeScreenRefference->updateConsumedBudget(_consumedBudget);
-		_homeScreenRefference->updateSimpleGraphic();
+		_homeScreenReference->updateConsumedBudget(_consumedBudget);
+		_homeScreenReference->updateSimpleGraphic();
 	}
 
 	void Observer::updateDebtBudgetNotification()
 	{
-		_homeScreenRefference->updateDebtBudget(_settingsManager->getDebtValue());
+		_homeScreenReference->updateDebtBudget(_settingsManager->getDebtValue());
 	}
 
 	double Observer::requestCategoryAmount(const MAUtil::String& category)
@@ -136,8 +136,8 @@ namespace Logical
 
 	void Observer::setListScreenRef(GUI::ListScreen* listScreen)
 	{
-		_listScreebRefference = listScreen;
-		_listScreebRefference->setObserver(this);
+		_listScreenReference = listScreen;
+		_listScreenReference->setObserver(this);
 	}
 
 	void Observer::setSettingsScreenRef(GUI::SettingsScreen* settingsScreen)
@@ -181,20 +181,24 @@ namespace Logical
 	void Observer::applySettings()
 	{
 		lprintfln("applySettings");
-		if(NULL != _listScreebRefference)
+
+		_DBManager->setDate(requestFromDate());
+
+		if(NULL != _listScreenReference)
 		{
-			_listScreebRefference->setDateFrom(requestFromDate());
-			_listScreebRefference->updateDebtValue();
-			_listScreebRefference->setCoin(requestCoin());
+			_listScreenReference->setDateFrom(requestFromDate());
+			_listScreenReference->updateDebtValue();
+			_listScreenReference->setCoin(requestCoin());
 		}
 
-		if(NULL != _homeScreenRefference)
+		if(NULL != _homeScreenReference)
 		{
-			_homeScreenRefference->setCoin(requestCoin());
+			_homeScreenReference->setCoin(requestCoin());
 		}
 
-		_listScreebRefference->populateIncomesList();
-		_listScreebRefference->populateExpensesList();
+		_listScreenReference->clearList();
+		_listScreenReference->populateIncomesList();
+		_listScreenReference->populateExpensesList();
 
 		updateConsumedBudgetNotification();
 

@@ -111,8 +111,6 @@ namespace GUI
 			checkBoxGroupParentLayout->addChild(checkBoxLabelLayout);
 
 			checkBoxVector->add(checkBox);
-
-			lprintfln("i = %d length = %d", i, length);
 		}
 
 		return checkBoxGroupParentLayout;
@@ -329,8 +327,8 @@ namespace GUI
 		{
 			//@todo change the path from hardcoded version to actual value
 			this->hide();
-			_homeScreenRef->createOptionsMenu();
-			_listScreenRef->createOptionsMenu();
+			if(_launcedFromHomeScreen) _homeScreenRef->createOptionsMenu();
+			else _listScreenRef->createOptionsMenu();
 
 			NativeUI::Date d = _datePicker->getDate();
 
@@ -350,8 +348,8 @@ namespace GUI
 		else if(button == _cancelButton)
 		{
 			this->hide();
-			_homeScreenRef->createOptionsMenu();
-			_listScreenRef->createOptionsMenu();
+			if(_launcedFromHomeScreen) _homeScreenRef->createOptionsMenu();
+			else _listScreenRef->createOptionsMenu();
 		}
 	}
 
@@ -423,8 +421,8 @@ namespace GUI
 
 		NativeUI::Dialog::show();
 
-		_homeScreenRef->removeOptionsMenu();
-		_listScreenRef->removeOptionsMenu();
+		if(_launcedFromHomeScreen) _homeScreenRef->removeOptionsMenu();
+		else _listScreenRef->removeOptionsMenu();
 	}
 
 	void AddIncomeDialog::setObserver(Logical::Observer* obs)

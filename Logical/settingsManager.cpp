@@ -16,7 +16,7 @@
 
 namespace Logical
 {
-	SettingsManager::SettingsManager() : _coin("EUR"), _showAll(false), _showFromDate(true), _showMonthly(false), _debtValue(0.0)
+	SettingsManager::SettingsManager() : _coin("EUR"), _showAll(true), _showFromDate(false), _showMonthly(false), _debtValue(0.0)
 	{
 		_settingsFile = maFileOpen(SETTINGS_FILE, MA_ACCESS_READ_WRITE);
 
@@ -138,7 +138,7 @@ namespace Logical
 			struct tm * dateTime = new tm;
 			split_time(maTime(), dateTime);
 
-			_date._mounth = dateTime->tm_mon;
+			_date._mounth = dateTime->tm_mon + 1;
 			_date._year = dateTime->tm_year + 1900;
 
 			delete dateTime;
@@ -173,8 +173,6 @@ namespace Logical
 
 		maFileTruncate(_settingsFile, 0);
 
-		lprintfln("4");
-
 		char buffer[BUFF_SIZE];
 		MAUtil::String binaryMask;
 
@@ -182,11 +180,8 @@ namespace Logical
 		else if(_showMonthly) binaryMask = "010";
 		else if(_showFromDate) binaryMask = "001";
 
-		lprintfln("5");
-
 		sprintf(buffer, "%s|%d|%s|%s|%.2f", _coin.c_str(), _date._day, Model::DateStructToString(_date).c_str(), binaryMask.c_str(), _debtValue);
 		lprintfln("%s", buffer);
-		lprintfln("6");
 
 		maFileWrite(_settingsFile, buffer, strlen(buffer));
 		maFileClose(_settingsFile);

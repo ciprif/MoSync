@@ -216,8 +216,6 @@ namespace GUI
 		_isFromDate = _observerReference->requestIsShowFromDate();
 		_debtValue = _observerReference->requestDebtValue();
 
-		lprintfln("%d %d %d", _isAllItems, _isMontly, _isFromDate);
-
 		MAUtil::String* coinLabelText = new MAUtil::String();
 
 		*coinLabelText = "The current coin: ";
@@ -233,16 +231,17 @@ namespace GUI
 		else if(_isMontly)
 		{
 			checkBoxStateChanged(_monthly, true);
+			_datePicker->setDayOfMonth(_observerReference->requestFromDate()._day);
+			_datePicker->setMonth(_observerReference->requestFromDate()._mounth);
+			_datePicker->setYear(_observerReference->requestFromDate()._year);
 		}
 		else if(_isFromDate)
 		{
 			checkBoxStateChanged(_fromDate, true);
+			_datePicker->setDayOfMonth(_observerReference->requestFromDate()._day);
+			_datePicker->setMonth(_observerReference->requestFromDate()._mounth);
+			_datePicker->setYear(_observerReference->requestFromDate()._year);
 		}
-
-
-		_datePicker->setDayOfMonth(_observerReference->requestFromDate()._day);
-		_datePicker->setMonth(_observerReference->requestFromDate()._mounth);
-		_datePicker->setYear(_observerReference->requestFromDate()._year);
 
 		_dayValue = _observerReference->requestFromDate()._day;
 
@@ -300,7 +299,7 @@ namespace GUI
 	{
 		if(state == true)
 		{
-			//checkBox->setState(true);
+			checkBox->setState(true);
 			if(checkBox == _monthly)
 			{
 				if(_transactionSettingsLayout->countChildWidgets() == 4)
@@ -367,11 +366,37 @@ namespace GUI
 			if(_isMontly)
 			{
 				d._day = _dayValue;
+
+				struct tm * dateTime = new tm;
+				split_time(maTime(), dateTime);
+
+				d._mounth = dateTime->tm_mon + 1;
+				d._year = dateTime->tm_year + 1900;
+			}
+			else if(_isAllItems)
+			{
+				d._day = 1;
+				d._mounth = 1;
+				d._year = 1601;
 			}
 
 			MAUtil::String coinLabelText = "The current coin: ";
 			coinLabelText += _coin;
 			_coinLabel->setText(coinLabelText);
+
+			if(_newDebtValueEditBox->getText().length() > 0) _debtValue = MAUtil::stringToDouble(_newDebtValueEditBox->getText().c_str());
+
+			MAUtil::String* debtValueLabelText = new MAUtil::String("The current debt value: ");
+			debtValueLabelText->append(MAUtil::doubleToString(_debtValue, 2).c_str(), MAUtil::doubleToString(_debtValue, 2).length());
+			debtValueLabelText->append(" ", 1);
+			debtValueLabelText->append(_coin.c_str(), _coin.length());
+
+			_debtValueLabel->setText(*debtValueLabelText);
+
+			delete debtValueLabelText;
+
+			_newDebtValueEditBox->setText("");
+			_newDebtValueEditBox->setPlaceholder("New debt value");
 
 			_observerReference->requestSaveSettings(_isAllItems, _isMontly, _isFromDate, _debtValue, d, _coin);
 		}

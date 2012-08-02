@@ -41,6 +41,8 @@ namespace Model
 		int _year;
 		int _mounth;
 		int _day;
+
+		DateStruct() : _day(1), _mounth(1), _year(1601) {}
 	};
 
 	struct TimeStruct

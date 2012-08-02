@@ -341,8 +341,8 @@ namespace GUI
 		{
 			//@todo change the path from hardcoded version to actual value
 			this->hide();
-			_homeScreenRef->createOptionsMenu();
-			_listScreenRef->createOptionsMenu();
+			if(_launcedFromHomeScreen) _homeScreenRef->createOptionsMenu();
+			else _listScreenRef->createOptionsMenu();
 
 			MAUtil::String s = "test";
 			NativeUI::Date d = _datePicker->getDate();
@@ -361,8 +361,8 @@ namespace GUI
 		else if(button == _cancelButton)
 		{
 			this->hide();
-			_homeScreenRef->createOptionsMenu();
-			_listScreenRef->createOptionsMenu();
+			if(_launcedFromHomeScreen) _homeScreenRef->createOptionsMenu();
+			else _listScreenRef->createOptionsMenu();
 		}
 	}
 
@@ -428,8 +428,8 @@ namespace GUI
 		_descriptionBoxParent->removeChild(_descriptionEditBox);
 		_descriptionEditBox->setText("");
 
-		_homeScreenRef->removeOptionsMenu();
-		_listScreenRef->removeOptionsMenu();
+		if(_launcedFromHomeScreen) _homeScreenRef->removeOptionsMenu();
+		else _listScreenRef->removeOptionsMenu();
 
 		NativeUI::Dialog::show();
 	}

@@ -1,18 +1,20 @@
 #include <ma.h>
 #include <mavsprintf.h>
 #include <MAUtil/Moblet.h>
-#include <NativeUI/Widgets.h>
-#include <NativeUI/WidgetUtil.h>
+#include <NativeUI/TabScreen.h>
+#include <NativeUI/PanoramaView.h>
+#include <conprint.h>
+
 #include "Screens/homeScreen.h"
 #include "Screens/addExpenseDialog.h"
 #include "Screens/addIncomeDialog.h"
 #include "Screens/listScreen.h"
 #include "Screens/settingsScreen.h"
+#include "Screens/loadingScreen.h"
 #include "Logical/observer.h"
 #include "Logical/settingsManager.h"
 
 using namespace MAUtil;
-using namespace NativeUI;
 
 /**
  * Moblet to be used as a template for a Native UI application.
@@ -25,8 +27,10 @@ public:
 	 */
 	NativeUIMoblet()
 	{
+		// create a new observer object.
 		_observer = new Logical::Observer();
 
+		// create the GUI.
 		createUI();
 	}
 
@@ -45,11 +49,15 @@ public:
 	 */
 	void createUI()
 	{
-		_parentScreen = new PanoramaView();
-		_parentScreen->setTitle("MyBudget");
+		GUI::LoadingScreen loadingScreen;
+		loadingScreen.show();
+		// the parent container is a panoramaView for WP7 and a TabScreen for Android and iOS
 
+		char buffer[BUFF_SIZE];
+		maGetSystemProperty("mosync.device.OS", buffer, BUFF_SIZE);
 
-		// Create a NativeUI screen that will hold layout and widgets.
+		lprintfln("%s", buffer);
+
 		_listScreen = new GUI::ListScreen();
 		_listScreen->setTitle("Transactions");
 		_homeScreen = new GUI::HomeScreen();
@@ -61,9 +69,25 @@ public:
 		_observer->setListScreenRef(_listScreen);
 		_observer->setSettingsScreenRef(_settingsScreen);
 
-		_parentScreen->addScreen(_homeScreen);
-		_parentScreen->addScreen(_listScreen);
-		_parentScreen->addScreen(_settingsScreen);
+		if(strcmp(buffer, "iOS") == 0 || strcmp(buffer, "Android") == 0)
+		{
+			_parentScreen = new NativeUI::TabScreen();
+			_parentScreen->setTitle("MyBudget");
+
+			((NativeUI::TabScreen*)_parentScreen)->addTab(_homeScreen);
+			((NativeUI::TabScreen*)_parentScreen)->addTab(_listScreen);
+			((NativeUI::TabScreen*)_parentScreen)->addTab(_settingsScreen);
+		}
+		else
+		{
+			_parentScreen = new NativeUI::PanoramaView();
+			_parentScreen->setTitle("MyBudget");
+
+			((NativeUI::PanoramaView*) _parentScreen)->addScreen(_homeScreen);
+			((NativeUI::PanoramaView*) _parentScreen)->addScreen(_listScreen);
+			((NativeUI::PanoramaView*) _parentScreen)->addScreen(_settingsScreen);
+		}
+
 		//Show the screen
 		_parentScreen->show();
 
@@ -74,9 +98,6 @@ public:
 		_homeScreen->setAddIncomesDialogReference(_incomesDialog);
 		_listScreen->setAddExpensesDialogReference(_expensesDialog);
 		_listScreen->setAddIncomeDialogReference(_incomesDialog);
-
-		_listScreen->populateIncomesList();
-		_listScreen->populateExpensesList();
 	}
 
 	/**
@@ -92,7 +113,7 @@ public:
 	}
 
 private:
-	PanoramaView* _parentScreen;
+	NativeUI::Screen* _parentScreen;
     GUI::HomeScreen* _homeScreen;
     GUI::ListScreen* _listScreen;
     GUI::SettingsScreen* _settingsScreen;

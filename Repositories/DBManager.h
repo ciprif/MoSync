@@ -36,11 +36,13 @@ namespace Repositories
 		Model::IncomeObject& getIncomeObject(const int& index) const;
 		void addExpense(Model::ExpenseObject* obj);
 		void addIncome(Model::IncomeObject* obj);
-		double getTotalBudget() const;
-		double getConsumedBudget() const;
+		double getTotalBudget();
+		double getConsumedBudget();
 		double getCategoryAmount(const MAUtil::String& category);
 		MAUtil::Vector<Model::ExpenseObject*>* getExpenses();
 		MAUtil::Vector<Model::IncomeObject*>* getIncomes();
+
+		void setDate(const Model::DateStruct& d);
 	private:
 		void addExpenseToList(const double& amount, const MAUtil::String& category, const MAUtil::String& description, const MAUtil::String& imgPath,
 							  const int& year, const int& month, const int& day, const int& hour, const int& minute);
@@ -54,6 +56,8 @@ namespace Repositories
 		MAUtil::String* _incomesFileContent;
 		double _totalBudget;
 		double _consumedBudget;
+
+		Model::DateStruct _date;
 	};
 }
 

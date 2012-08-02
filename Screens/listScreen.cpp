@@ -53,17 +53,6 @@ namespace GUI
 	{
 		MAUtil::Vector<Model::ExpenseObject*>* expList = _observerReference->expensesListRequest();
 
-		_listView->removeListViewListener(this);
-
-		delete _listView;
-
-		_listView = new NativeUI::ListView();
-		_listView->fillSpaceHorizontally();
-		_listView->fillSpaceVertically();
-		_listView->addListViewListener(this);
-
-		_mainLayout->addChild(_listView);
-
 		Model::ListItemModel* obj;
 		lprintfln("populateExpensesList %s", Model::DateStructToString(*_startFromDate).c_str());
 
@@ -76,7 +65,6 @@ namespace GUI
 				_listView->addChild(_createListItem(*obj, _listView->countChildWidgets()));
 				_itemsMap->add(*obj);
 				delete obj;
-				_characteristicArrayForSorting.add(_itemsMap->size() - 1);
 			}
 		}
 	}
@@ -85,21 +73,11 @@ namespace GUI
 	{
 		MAUtil::Vector<Model::IncomeObject*>* incList = _observerReference->incomesListRequest();
 
-		_listView->removeListViewListener(this);
-
-		delete _listView;
-
-		_listView = new NativeUI::ListView();
-		_listView->fillSpaceHorizontally();
-		_listView->fillSpaceVertically();
-		_listView->addListViewListener(this);
-
-		_mainLayout->addChild(_listView);
-
 		Model::ListItemModel* obj;
 		lprintfln("populateIncomesList %s", Model::DateStructToString(*_startFromDate).c_str());
 		for(int i = 0; i < incList->size(); i++)
 		{
+			lprintfln("item %d - %s", i, Model::DateStructToString((*incList)[i]->getDate()).c_str());
 			if(Model::CompareDateObjects(*_startFromDate, (*incList)[i]->getDate()) == -1)
 			{
 				obj = new Model::ListItemModel();
@@ -107,7 +85,6 @@ namespace GUI
 				_listView->addChild(_createListItem(*obj, _listView->countChildWidgets()));
 				_itemsMap->add(*obj);
 				delete obj;
-				_characteristicArrayForSorting.add(_itemsMap->size() - 1);
 			}
 		}
 	}
@@ -198,8 +175,22 @@ namespace GUI
 
 		for(int i = 0; i < _itemsMap->size(); i++)
 		{
+			lprintfln("%d", i);
 			_listView->addChild(_createListItem((*_itemsMap)[i], i));
 		}
+	}
+
+	void ListScreen::clearList()
+	{
+		_listView->removeListViewListener(this);
+		delete _listView;
+
+		_listView = new NativeUI::ListView();
+		_listView->fillSpaceHorizontally();
+		_listView->fillSpaceVertically();
+		_listView->addListViewListener(this);
+
+		_mainLayout->addChild(_listView);
 	}
 
 	void ListScreen::_createUI()

@@ -251,6 +251,7 @@ namespace Repositories
 		maFileClose(_DBExpenses);
 
 		_expenses->add(obj);
+		_consumedBudget += (obj->getAmount());
 	}
 
 	void DBManager::addIncome(Model::IncomeObject* obj)
@@ -277,6 +278,7 @@ namespace Repositories
 		maFileClose(_DBExpenses);
 
 		_incomes->add(obj);
+		_totalBudget += (obj->getAmount());
 	}
 
 	int DBManager::getNumberOfIncomes() const
@@ -297,23 +299,37 @@ namespace Repositories
 	{
 		Model::ExpenseObject* obj = new Model::ExpenseObject(amount, category, description, imgPath, year, month, day, hour, minute);
 		_expenses->add(obj);
-		_consumedBudget += amount;
 	}
 	void DBManager::addIncomeToList(const double& amount, const MAUtil::String& type, const MAUtil::String& description, const MAUtil::String& transactionInfo,
 								  const int& year, const int& month, const int& day, const int& hour, const int& minute)
 	{
 		Model::IncomeObject* obj = new Model::IncomeObject(amount, type, description, transactionInfo, year, month, day, hour, minute);
 		_incomes->add(obj);
-		_totalBudget += amount;
 	}
 
-	double DBManager::getTotalBudget() const
+	double DBManager::getTotalBudget()
 	{
+		_totalBudget = 0.0;
+		for(int i = 0; i < _incomes->size(); i++)
+		{
+			if(Model::CompareDateObjects(_date, (*_incomes)[i]->getDate()) == -1)
+			{
+				_totalBudget += (*_incomes)[i]->getAmount();
+			}
+		}
 		return _totalBudget;
 	}
 
-	double DBManager::getConsumedBudget() const
+	double DBManager::getConsumedBudget()
 	{
+		_consumedBudget = 0.0;
+		for(int i = 0; i < _expenses->size(); i++)
+		{
+			if(Model::CompareDateObjects(_date, (*_expenses)[i]->getDate()) == -1)
+			{
+				_consumedBudget += (*_expenses)[i]->getAmount();
+			}
+		}
 		return _consumedBudget;
 	}
 
@@ -322,12 +338,19 @@ namespace Repositories
 		double value = 0.0;
 		for(int i = 0; i < _expenses->size(); i++)
 		{
-			if(strcmp((*_expenses)[i]->getCategory().c_str(), category.c_str()) == 0)
+			if(strcmp((*_expenses)[i]->getCategory().c_str(), category.c_str()) == 0 && Model::CompareDateObjects(_date, (*_expenses)[i]->getDate()))
 			{
 				value += (*_expenses)[i]->getAmount();
 			}
 		}
 		return value;
+	}
+
+	void DBManager::setDate(const Model::DateStruct& d)
+	{
+		_date._day = d._day;
+		_date._mounth = d._mounth;
+		_date._year = d._year;
 	}
 
 	MAUtil::Vector<Model::ExpenseObject*>* DBManager::getExpenses()

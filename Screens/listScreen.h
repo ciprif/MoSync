@@ -47,6 +47,7 @@ namespace GUI
 		void sortListByDate(bool descending);
 		void sortListByType(bool incomesFirst);
 		void sortListByAmount(bool descending);
+		void clearList();
 
 		void setCoin(const MAUtil::String& coin);
 

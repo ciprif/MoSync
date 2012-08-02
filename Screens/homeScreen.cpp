@@ -182,12 +182,14 @@ namespace GUI
 		{
 			if(_addExpenseIndex == index) //add expense screen
 			{
+				lprintfln("ici sha");
 				if(NULL != _addExpensesDialog)
 				{
 					_addExpensesDialog->setObserver(_observerReference);
 
 					_budgetTotalValue =  _observerReference->requestTotalBudget();
 					_budgetConsumedValue = _observerReference->requestConsumedBudget();
+					lprintfln("%lf %lf", _budgetTotalValue, _budgetConsumedValue);
 
 					_addExpensesDialog->setAvailableBudget(_budgetTotalValue - _budgetConsumedValue);
 					/** @todo get this value from settings */
@@ -267,13 +269,17 @@ namespace GUI
 	{
 		if((_budgetTotalValue - _budgetConsumedValue) >= 0)
 		{
-			double valueWidth = (_budgetConsumedValue / _budgetTotalValue) * _parentLayoutWidth;
+			double valueWidth;
+
+			if(0 < _budgetTotalValue) valueWidth = (_budgetConsumedValue / _budgetTotalValue) * _parentLayoutWidth;
+
 			if((int)(_budgetTotalValue - _budgetConsumedValue) == 0)
 			{
 				_budgetSimpleGraphicConsumedBudgetLayout->setWidth(1);
 			}
 			else
 			{
+				if(0 == valueWidth) valueWidth = 1;
 				_budgetSimpleGraphicConsumedBudgetLayout->setWidth((int)valueWidth);
 			}
 
