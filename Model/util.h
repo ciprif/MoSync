@@ -88,7 +88,8 @@ namespace Model
 					else
 					{
 						if(date1._day > date2._day) return 1;
-						else return -1;
+						else if(date1._day == date2._day) return 0;
+						return -1;
 					}
 				}
 			}

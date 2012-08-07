@@ -95,6 +95,8 @@ namespace GUI
 		void addExpensesDialogLoaded();
 		void addIncomesDialogLoaded();
 		void setCoin(const MAUtil::String&);
+
+		void updateValues();
 	private:
 		/**
 		 * \brief creates the main layout and sets some enviroment variables. This is the point where
@@ -136,7 +138,6 @@ namespace GUI
 		NativeUI::VerticalLayout* _createCategoryGraphic(const MAUtil::String& category, const double& total, const double& consumed, const int& width, const int& height, const int& index);
 
 		void _updateConsumeBar(NativeUI::HorizontalLayout* consumeBar, const double& value);
-		void _updateValues();
 		void _removeActivityIndicator();
 
 		// Member data

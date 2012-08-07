@@ -116,12 +116,10 @@ namespace Logical
 	void Observer::updateTotalBudgetNotification()
 	{
 		_homeScreenReference->updateTotalBudget(_totalBudget);
-		_homeScreenReference->updateSimpleGraphic();
 	}
 	void Observer::updateConsumedBudgetNotification()
 	{
 		_homeScreenReference->updateConsumedBudget(_consumedBudget);
-		_homeScreenReference->updateSimpleGraphic();
 	}
 
 	void Observer::updateDebtBudgetNotification()
@@ -180,35 +178,51 @@ namespace Logical
 
 	void Observer::applySettings()
 	{
-		lprintfln("applySettings");
-
 		_DBManager->setDate(requestFromDate());
+
+		if(NULL != _homeScreenReference)
+		{
+			updateDebtBudgetNotification();
+			_homeScreenReference->setCoin(requestCoin());
+
+			MAUtil::Vector<Model::IncomeObject*>* incomes =  _DBManager->getIncomes();
+			MAUtil::Vector<Model::ExpenseObject*>* expenses =  _DBManager->getExpenses();
+
+			_totalBudget = 0.0;
+			_consumedBudget = 0.0;
+
+			for(int i = 0; i < incomes->size(); i++)
+			{
+				if(Model::CompareDateObjects(requestFromDate(), (*incomes)[i]->getDate()) == -1 || Model::CompareDateObjects(requestFromDate(), (*incomes)[i]->getDate()) == 0)
+				{
+					_totalBudget += (*incomes)[i]->getAmount();
+				}
+			}
+
+			for(int i = 0; i < expenses->size(); i++)
+			{
+				if(Model::CompareDateObjects(requestFromDate(), (*expenses)[i]->getDate()) == -1 || Model::CompareDateObjects(requestFromDate(), (*expenses)[i]->getDate()) == 0)
+				{
+					_consumedBudget += (*expenses)[i]->getAmount();
+				}
+			}
+
+			_homeScreenReference->updateValues();
+		}
 
 		if(NULL != _listScreenReference)
 		{
 			_listScreenReference->setDateFrom(requestFromDate());
 			_listScreenReference->updateDebtValue();
 			_listScreenReference->setCoin(requestCoin());
+			_listScreenReference->clearList();
+			_listScreenReference->populateIncomesList();
+			_listScreenReference->populateExpensesList();
 		}
-
-		if(NULL != _homeScreenReference)
-		{
-			_homeScreenReference->setCoin(requestCoin());
-		}
-
-		_listScreenReference->clearList();
-		_listScreenReference->populateIncomesList();
-		_listScreenReference->populateExpensesList();
-
-		updateConsumedBudgetNotification();
-
-		updateTotalBudgetNotification();
-		updateDebtBudgetNotification();
 	}
 
 	void Observer::requestSaveSettings(bool isShowAll, bool isMonthly, bool isFromDate, const double& debtValue, const Model::DateStruct& date, const MAUtil::String& coin)
 	{
-		lprintfln("requestSaveSettings");
 		_settingsManager->setCoin(coin);
 		_settingsManager->setDateFrom(date);
 		_settingsManager->setDebtValue(debtValue);
@@ -219,6 +233,16 @@ namespace Logical
 		_settingsManager->ApplySettings();
 
 		applySettings();
+	}
+
+	void Observer::requestClearTransactionList()
+	{
+		_listScreenReference->clearList();
+		_DBManager->clearFiles();
+
+		_totalBudget = 0.0;
+		_consumedBudget = 0.0;
+		_homeScreenReference->updateValues();
 	}
 }
 

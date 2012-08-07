@@ -56,8 +56,6 @@ public:
 		char buffer[BUFF_SIZE];
 		maGetSystemProperty("mosync.device.OS", buffer, BUFF_SIZE);
 
-		lprintfln("%s", buffer);
-
 		_listScreen = new GUI::ListScreen();
 		_listScreen->setTitle("Transactions");
 		_homeScreen = new GUI::HomeScreen();

@@ -110,7 +110,6 @@ namespace Logical
 		MAUtil::String binaryMask = content.substr(offset, position - offset); //read the binary mask
 		offset = position + 1;
 		_debtValue = MAUtil::stringToDouble(content.substr(offset, content.length() - offset));
-		lprintfln("%s", binaryMask.c_str());
 
 		if(binaryMask ==  "100")
 		{
@@ -156,7 +155,6 @@ namespace Logical
 			_date._mounth = MAUtil::stringToInteger(dateString.substr(offset, position - offset), 10);
 
 			offset = position + 1;
-			lprintfln("%d %d", dateString.length(), offset);
 			_date._day = MAUtil::stringToInteger(dateString.substr(offset, dateString.length() - offset), 10);
 		}
 		else if(_showAll)
@@ -181,7 +179,6 @@ namespace Logical
 		else if(_showFromDate) binaryMask = "001";
 
 		sprintf(buffer, "%s|%d|%s|%s|%.2f", _coin.c_str(), _date._day, Model::DateStructToString(_date).c_str(), binaryMask.c_str(), _debtValue);
-		lprintfln("%s", buffer);
 
 		maFileWrite(_settingsFile, buffer, strlen(buffer));
 		maFileClose(_settingsFile);

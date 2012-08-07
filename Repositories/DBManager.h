@@ -43,6 +43,8 @@ namespace Repositories
 		MAUtil::Vector<Model::IncomeObject*>* getIncomes();
 
 		void setDate(const Model::DateStruct& d);
+
+		void clearFiles();
 	private:
 		void addExpenseToList(const double& amount, const MAUtil::String& category, const MAUtil::String& description, const MAUtil::String& imgPath,
 							  const int& year, const int& month, const int& day, const int& hour, const int& minute);

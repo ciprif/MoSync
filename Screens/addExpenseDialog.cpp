@@ -52,6 +52,8 @@ namespace GUI
 		_descriptionToggleButton->removeToggleButtonListener(this);
 		_imageAtachementToggleButton->removeToggleButtonListener(this);
 		_amountSlider->removeSliderListener(this);
+		_selectImageButton->removeButtonListener(this);
+		_captureImageButton->removeButtonListener(this);
 
 		MAUtil::Vector<NativeUI::CheckBox*>::iterator it;
 		for(it = checkBoxVector->begin(); it != checkBoxVector->end(); it++)
@@ -213,6 +215,9 @@ namespace GUI
 		_captureImageButton = new NativeUI::ImageButton();
 		_selectImageButton = new NativeUI::ImageButton();
 
+		_selectImageButton->addButtonListener(this);
+		_captureImageButton->addButtonListener(this);
+
 		imageToggleLabel->setText("Atach an image:");
 		imageToggleLabel->setFontSize(DIALOG_FONT_SIZE);
 
@@ -339,12 +344,10 @@ namespace GUI
 	{
 		if(button == _addButton)
 		{
-			//@todo change the path from hardcoded version to actual value
 			this->hide();
 			if(_launcedFromHomeScreen) _homeScreenRef->createOptionsMenu();
 			else _listScreenRef->createOptionsMenu();
 
-			MAUtil::String s = "test";
 			NativeUI::Date d = _datePicker->getDate();
 
 			Model::DateStruct date;
@@ -356,13 +359,17 @@ namespace GUI
 			time._hour = _timePicker->getHour();
 			time._minutes = _timePicker->getMinute();
 
-			_observerReference->requestExpenseAddition((double)_amountSlider->getValue(), _categoryValue, _descriptionEditBox->getText(), s, date, time);
+			_observerReference->requestExpenseAddition((double)_amountSlider->getValue(), _categoryValue, _descriptionEditBox->getText(), "", date, time);
 		}
 		else if(button == _cancelButton)
 		{
 			this->hide();
 			if(_launcedFromHomeScreen) _homeScreenRef->createOptionsMenu();
 			else _listScreenRef->createOptionsMenu();
+		}
+		else
+		{
+			maAlert("Alert!", "Feature is not yet available. Please wait for a future update.", NULL, NULL, NULL);
 		}
 	}
 
@@ -416,15 +423,23 @@ namespace GUI
 
 	void AddExpenseDialog::show()
 	{
+		lprintfln("show");
 		MAUtil::Vector<NativeUI::CheckBox*>::iterator it;
 		for(it = checkBoxVector->begin(); it != checkBoxVector->end(); it++)
 		{
 			NativeUI::CheckBox* cb = *it;
 			cb->setState(false);
 		}
+
+		it = checkBoxVector->begin();
+		(*it)->setState(true);
+
+
 		_amountSlider->setValue(0);
 		_descriptionToggleButton->setCheckedState(false);
+		_imageAtachementToggleButton->setCheckedState(false);
 
+		_imageBoxAndToggleLayout->removeChild(_imageButtonsParentLayout);
 		_descriptionBoxParent->removeChild(_descriptionEditBox);
 		_descriptionEditBox->setText("");
 
@@ -457,7 +472,7 @@ namespace GUI
 
 	void AddExpenseDialog::updateAmountSliderValue()
 	{
-		_amountSlider->setMaximumValue(_availableBudget + _acceptedDept);
+		_amountSlider->setMaximumValue((int)(_availableBudget + _acceptedDept));
 	}
 
 	void AddExpenseDialog::setAcceptedDebtValue(const double& value)

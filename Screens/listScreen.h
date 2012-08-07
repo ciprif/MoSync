@@ -14,6 +14,7 @@
 #include <NativeUI/Label.h>
 #include <MAUtil/String.h>
 #include <MAUtil/Map.h>
+#include <MAUtil/Environment.h>
 #include "../Logical/observer.h"
 #include "../Model/util.h"
 
@@ -37,7 +38,7 @@ namespace GUI
 	class AddExpenseDialog;
 	class AddIncomeDialog;
 
-	class ListScreen : public NativeUI::Screen, public NativeUI::ListViewListener, public NativeUI::ScreenListener
+	class ListScreen : public NativeUI::Screen, public NativeUI::ListViewListener, public NativeUI::ScreenListener, public MAUtil::CustomEventListener
 	{
 	public:
 		ListScreen();
@@ -86,6 +87,8 @@ namespace GUI
 		void setDateFrom(const Model::DateStruct& dateFrom);
 
 		void updateDebtValue();
+
+		void customEvent(const MAEvent& event);
 	private:
 		void _createUI();
 		/**
@@ -112,6 +115,7 @@ namespace GUI
 
 		int _addIncomeIndex;
 		int _addExpenseIndex;
+		int _clearListIndex;
 		int _sortByDateIndex;
 		int _sortByCategoryIndex;
 		int _sortByAmountIndex;

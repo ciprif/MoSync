@@ -31,8 +31,6 @@ namespace GUI
 
 	SettingsScreen::~SettingsScreen()
 	{
-		_apply->removeButtonListener(this);
-		_reset->removeButtonListener(this);
 		_allItems->removeCheckBoxListener(this);
 		_monthly->removeCheckBoxListener(this);
 		_fromDate->removeCheckBoxListener(this);
@@ -48,7 +46,7 @@ namespace GUI
 		_itemWidth = 9 * (screenWidth / 10) - screenWidth / 30;
 
 		NativeUI::VerticalLayout* parent = new NativeUI::VerticalLayout();
-		parent->setHeight(500);
+		parent->setHeight(370);
 
 		_mainLayout = new NativeUI::VerticalLayout();
 		_mainLayout->setScrollable(true);
@@ -59,22 +57,12 @@ namespace GUI
 		_transactionSettingsLayout = _createTransactionListSettingsLayout();
 		_mainLayout->addChild(_transactionSettingsLayout);
 
-		_apply = new NativeUI::Button();
-		_apply->addButtonListener(this);
-		_reset = new NativeUI::Button();
-		_reset->addButtonListener(this);
-
-		_apply->setText("Apply");
-		_reset->setText("Restore");
-
-		_apply->fillSpaceHorizontally();
-		_reset->fillSpaceHorizontally();
-
-		_mainLayout->addChild(_apply);
-		_mainLayout->addChild(_reset);
-
 		parent->addChild(_mainLayout);
 		this->setMainWidget(parent);
+
+		createOptionsMenu();
+
+		addScreenListener(this);
 	}
 
 	NativeUI::VerticalLayout* SettingsScreen::_createCoinSettingsLayout()
@@ -354,9 +342,27 @@ namespace GUI
 		}
 	}
 
-	void SettingsScreen::buttonClicked(NativeUI::Widget* widget)
+	void SettingsScreen::numberPickerValueChanged(NativeUI::NumberPicker* picker, int value)
 	{
-		if(_apply == widget)
+		if(picker == _numberPicker)
+		{
+			_dayValue = value;
+		}
+	}
+
+	void SettingsScreen::datePickerValueChanged(NativeUI::DatePicker* picker, const NativeUI::Date& selected)
+	{
+	}
+
+	void SettingsScreen::createOptionsMenu()
+	{
+		_saveButtonIndex = addOptionsMenuItem("Save", MAW_OPTIONS_MENU_ICON_CONSTANT_SAVE, false);
+		_restoreButtonIndex = addOptionsMenuItem("Restore", MAW_OPTIONS_MENU_ICON_CONSTANT_CLOSE_CLEAR_CANCEL, false);
+	}
+
+	void SettingsScreen::optionsMenuItemSelected(NativeUI::Screen*, int index)
+	{
+		if(index == _saveButtonIndex)
 		{
 			Model::DateStruct d;
 			d._day = _datePicker->getDayOfMonth();
@@ -400,21 +406,9 @@ namespace GUI
 
 			_observerReference->requestSaveSettings(_isAllItems, _isMontly, _isFromDate, _debtValue, d, _coin);
 		}
-		else if(_reset == widget)
+		else if(index == _restoreButtonIndex)
 		{
 			_updateValues(); //reset values with the saved ones observer
 		}
-	}
-
-	void SettingsScreen::numberPickerValueChanged(NativeUI::NumberPicker* picker, int value)
-	{
-		if(picker == _numberPicker)
-		{
-			_dayValue = value;
-		}
-	}
-
-	void SettingsScreen::datePickerValueChanged(NativeUI::DatePicker* picker, const NativeUI::Date& selected)
-	{
 	}
 }

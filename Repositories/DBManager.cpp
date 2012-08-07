@@ -272,10 +272,10 @@ namespace Repositories
 		incomeContent.append(time.c_str(), time.length());
 		incomeContent.append("|", 1);
 
-		_DBExpenses = maFileOpen(INCOMES_FILE, MA_ACCESS_READ_WRITE);
-		maFileSeek(_DBExpenses, 0, SEEK_END);
-		maFileWrite(_DBExpenses, incomeContent.c_str(), incomeContent.length());
-		maFileClose(_DBExpenses);
+		_DBIncomes = maFileOpen(INCOMES_FILE, MA_ACCESS_READ_WRITE);
+		maFileSeek(_DBIncomes, 0, SEEK_END);
+		maFileWrite(_DBIncomes, incomeContent.c_str(), incomeContent.length());
+		maFileClose(_DBIncomes);
 
 		_incomes->add(obj);
 		_totalBudget += (obj->getAmount());
@@ -325,7 +325,8 @@ namespace Repositories
 		_consumedBudget = 0.0;
 		for(int i = 0; i < _expenses->size(); i++)
 		{
-			if(Model::CompareDateObjects(_date, (*_expenses)[i]->getDate()) == -1)
+			if(Model::CompareDateObjects(_date, (*_expenses)[i]->getDate()) == -1 ||
+			   Model::CompareDateObjects(_date, (*_expenses)[i]->getDate()) == 0)
 			{
 				_consumedBudget += (*_expenses)[i]->getAmount();
 			}
@@ -338,7 +339,9 @@ namespace Repositories
 		double value = 0.0;
 		for(int i = 0; i < _expenses->size(); i++)
 		{
-			if(strcmp((*_expenses)[i]->getCategory().c_str(), category.c_str()) == 0 && Model::CompareDateObjects(_date, (*_expenses)[i]->getDate()))
+			if(strcmp((*_expenses)[i]->getCategory().c_str(), category.c_str()) == 0 &&
+			   (Model::CompareDateObjects(_date, (*_expenses)[i]->getDate()) == -1 ||
+			    Model::CompareDateObjects(_date, (*_expenses)[i]->getDate()) == 0))
 			{
 				value += (*_expenses)[i]->getAmount();
 			}
@@ -360,5 +363,19 @@ namespace Repositories
 	MAUtil::Vector<Model::IncomeObject*>* DBManager::getIncomes()
 	{
 		return _incomes;
+	}
+
+	void DBManager::clearFiles()
+	{
+		_DBIncomes = maFileOpen(INCOMES_FILE, MA_ACCESS_READ_WRITE);
+		maFileTruncate(_DBIncomes, 0);
+		maFileClose(_DBIncomes);
+
+		_DBExpenses = maFileOpen(EXPENSES_FILE, MA_ACCESS_READ_WRITE);
+		maFileTruncate(_DBExpenses, 0);
+		maFileClose(_DBExpenses);
+
+		_incomes->clear();
+		_expenses->clear();
 	}
 }

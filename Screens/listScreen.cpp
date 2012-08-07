@@ -19,12 +19,18 @@
 
 namespace GUI
 {
+	bool isFromRemove;
+
 	int _sortByDateCriteria(const Model::ListItemModel&, const Model::ListItemModel&);
 	int _sortByTypeCriteria(const Model::ListItemModel&, const Model::ListItemModel&);
 	int _sortByAmountCriteria(const Model::ListItemModel&, const Model::ListItemModel&);
 
 	ListScreen::ListScreen() : _listView(NULL)
 	{
+		isFromRemove = false;
+
+		 MAUtil::Environment::getEnvironment().addCustomEventListener(this);
+
 		_detailsMap = new MAUtil::Vector<NativeUI::Label*>();
 		_itemsMap = new MAUtil::Vector<Model::ListItemModel>();
 		_coin = "EUR";
@@ -54,11 +60,10 @@ namespace GUI
 		MAUtil::Vector<Model::ExpenseObject*>* expList = _observerReference->expensesListRequest();
 
 		Model::ListItemModel* obj;
-		lprintfln("populateExpensesList %s", Model::DateStructToString(*_startFromDate).c_str());
 
 		for(int i = 0; i < expList->size(); i++)
 		{
-			if(Model::CompareDateObjects(*_startFromDate, (*expList)[i]->getDate()) == -1)
+			if(Model::CompareDateObjects(*_startFromDate, (*expList)[i]->getDate()) == -1 || Model::CompareDateObjects(*_startFromDate, (*expList)[i]->getDate()) == 0)
 			{
 				obj = new Model::ListItemModel();
 				obj->setExpense(*(*expList)[i]);
@@ -74,11 +79,9 @@ namespace GUI
 		MAUtil::Vector<Model::IncomeObject*>* incList = _observerReference->incomesListRequest();
 
 		Model::ListItemModel* obj;
-		lprintfln("populateIncomesList %s", Model::DateStructToString(*_startFromDate).c_str());
 		for(int i = 0; i < incList->size(); i++)
 		{
-			lprintfln("item %d - %s", i, Model::DateStructToString((*incList)[i]->getDate()).c_str());
-			if(Model::CompareDateObjects(*_startFromDate, (*incList)[i]->getDate()) == -1)
+			if(Model::CompareDateObjects(*_startFromDate, (*incList)[i]->getDate()) == -1 || Model::CompareDateObjects(*_startFromDate, (*incList)[i]->getDate()) == 0)
 			{
 				obj = new Model::ListItemModel();
 				obj->setIncome(*(*incList)[i]);
@@ -130,9 +133,18 @@ namespace GUI
 
 	void ListScreen::sortListByDate(bool descending)
 	{
-		lprintfln("sortListByDate");
 		if(descending) _sortList(_sortByDateCriteria, 0, _itemsMap->size() - 1, 1);
 		else _sortList(_sortByDateCriteria, 0, _itemsMap->size() - 1, -1);
+
+		for(int k = 0; k < _itemsMap->size(); k++)
+		{
+			Model::DateStruct d;
+			if((*_itemsMap)[k].IsExpense())
+			{
+				d = (*_itemsMap)[k].getExpenseObject().getDate();
+			}
+			else d = (*_itemsMap)[k].getIncomeObject().getDate();
+		}
 
 		_clearAndRepopulateList();
 	}
@@ -155,7 +167,6 @@ namespace GUI
 
 	void ListScreen::_clearAndRepopulateList()
 	{
-		lprintfln("_clearAndRepopulateList");
 		_listView->removeListViewListener(this);
 
 		delete _listView;
@@ -175,7 +186,6 @@ namespace GUI
 
 		for(int i = 0; i < _itemsMap->size(); i++)
 		{
-			lprintfln("%d", i);
 			_listView->addChild(_createListItem((*_itemsMap)[i], i));
 		}
 	}
@@ -320,6 +330,7 @@ namespace GUI
 	{
 		_addExpenseIndex = addOptionsMenuItem("Expense", "addIncome.png", true);
 		_addIncomeIndex = addOptionsMenuItem("Income", MAW_OPTIONS_MENU_ICON_CONSTANT_ADD, false);
+		_clearListIndex = addOptionsMenuItem("Clear list", MAW_OPTIONS_MENU_ICON_CONSTANT_DELETE, false);
 
 		_sortByDateIndex = addOptionsMenuItem("Sort by date");
 		_sortByCategoryIndex = addOptionsMenuItem("Sort by category");
@@ -410,6 +421,11 @@ namespace GUI
 				_countClicksCategory = 0;
 				_countClicksDates = 0;
 			}
+			else if(_clearListIndex == index)
+			{
+				maAlert("Alert!", "Are you sure you want to clear the list? Note that this action has a permanent effect.", "OK", "Cancel", NULL);
+				isFromRemove = true;
+			}
 		}
 	}
 
@@ -436,18 +452,15 @@ namespace GUI
 
 	void ListScreen::_sortList(int (*criteria)(const Model::ListItemModel&, const Model::ListItemModel&), int left, int right, int value)
 	{
-//		lprintfln("enter _sortList");
-//		for(int k = 0; k < _itemsMap->size(); k++)
-//		{
-//			Model::DateStruct d;
-//			if((*_itemsMap)[k].IsExpense())
-//			{
-//				d = (*_itemsMap)[k].getExpenseObject().getDate();
-//			}
-//			else d = (*_itemsMap)[k].getIncomeObject().getDate();
-//
-//			lprintfln("%d %s", k, Model::DateStructToString(d).c_str());
-//		}
+		for(int k = 0; k < _itemsMap->size(); k++)
+		{
+			Model::DateStruct d;
+			if((*_itemsMap)[k].IsExpense())
+			{
+				d = (*_itemsMap)[k].getExpenseObject().getDate();
+			}
+			else d = (*_itemsMap)[k].getIncomeObject().getDate();
+		}
 		int i = left, j = right;
 		Model::ListItemModel* pivot = new Model::ListItemModel((*_itemsMap)[(left + right) / 2]);
 		Model::ListItemModel* aux;
@@ -471,20 +484,6 @@ namespace GUI
 					(*_itemsMap)[i] = (*_itemsMap)[j];
 					(*_itemsMap)[j] = *aux;
 
-//				lprintfln("after swap");
-//
-//				for(int k = 0; k < _itemsMap->size(); k++)
-//				{
-//					Model::DateStruct d;
-//					if((*_itemsMap)[k].IsExpense())
-//					{
-//						d = (*_itemsMap)[k].getExpenseObject().getDate();
-//					}
-//					else d = (*_itemsMap)[k].getIncomeObject().getDate();
-//
-//					lprintfln("%d %s", k, Model::DateStructToString(d).c_str());
-//				}
-
 					delete aux;
 				}
 				i++;
@@ -496,13 +495,23 @@ namespace GUI
 			_sortList(criteria, left, j, value);
 		if (i < right)
 			_sortList(criteria, i, right, value);
-
-		lprintfln("-------------- out of recursion ------------------");
 	}
 
 	void ListScreen::updateDebtValue()
 	{
 		_debtBudget = _observerReference->requestDebtValue();
+	}
+
+	void ListScreen::customEvent(const MAEvent& event)
+	{
+		if(event.type == EVENT_TYPE_ALERT)
+		{
+			if(1 == event.alertButtonIndex && isFromRemove)
+			{
+				_observerReference->requestClearTransactionList();
+				isFromRemove = false;
+			}
+		}
 	}
 }
 

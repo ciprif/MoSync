@@ -49,7 +49,6 @@ namespace GUI
 
 	void HomeScreen::_createUI(const int& screenHeight, const int& screenWidth)
 	{
-		lprintfln("HomeScreen::_createUI");
 		_parentLayoutWidth = 8 * (screenWidth / 10);
 
 		_categoryGraphicWidth = (int)(_parentLayoutWidth - 2.5 * ( screenWidth / 10 ));
@@ -101,7 +100,7 @@ namespace GUI
 		double valueWidth = (_budgetConsumedValue / _budgetTotalValue) * width;
 
 		_budgetSimpleGraphicConsumedBudgetLayout->setHeight(height);
-		_budgetSimpleGraphicConsumedBudgetLayout->setWidth(valueWidth);
+		_budgetSimpleGraphicConsumedBudgetLayout->setWidth((int)valueWidth);
 
 		_spacerSimpleGraphic = new NativeUI::HorizontalLayout();
 		_spacerSimpleGraphic->setBackgroundColor(RED);
@@ -166,7 +165,6 @@ namespace GUI
 
 	void HomeScreen::createOptionsMenu()
 	{
-		lprintfln("createOptionsMenu");
 		_addExpenseIndex = addOptionsMenuItem("Expense", "addIncome.png", true);
 		_addIncomeIndex = addOptionsMenuItem("Income", MAW_OPTIONS_MENU_ICON_CONSTANT_ADD, false);
 	}
@@ -182,14 +180,12 @@ namespace GUI
 		{
 			if(_addExpenseIndex == index) //add expense screen
 			{
-				lprintfln("ici sha");
 				if(NULL != _addExpensesDialog)
 				{
 					_addExpensesDialog->setObserver(_observerReference);
 
 					_budgetTotalValue =  _observerReference->requestTotalBudget();
 					_budgetConsumedValue = _observerReference->requestConsumedBudget();
-					lprintfln("%lf %lf", _budgetTotalValue, _budgetConsumedValue);
 
 					_addExpensesDialog->setAvailableBudget(_budgetTotalValue - _budgetConsumedValue);
 					/** @todo get this value from settings */
@@ -221,7 +217,7 @@ namespace GUI
 	void HomeScreen::setObserver(Logical::Observer* observer)
 	{
 		_observerReference = observer;
-		_updateValues();
+		updateValues();
 	}
 
 	void HomeScreen::updateBudgetValues(const double& value, bool isExpense, const MAUtil::String& category)
@@ -247,7 +243,11 @@ namespace GUI
 			consumeBar->setWidth(1);
 		else
 		{
-			double valueWidth = (value / _budgetTotalValue) * _categoryGraphicWidth;
+			double valueWidth = 0.0;
+
+			if(0 < _budgetTotalValue) valueWidth = (value / _budgetTotalValue) * _categoryGraphicWidth;
+			else valueWidth = (value / _budgetConsumedValue) * _categoryGraphicWidth;
+
 			if(valueWidth > _categoryGraphicWidth)
 			{
 				NativeUI::HorizontalLayout* debtPart = new NativeUI::HorizontalLayout();
@@ -287,6 +287,8 @@ namespace GUI
 			sprintf(budgetString, "Consumed %.2f / %.2f %s", _budgetConsumedValue, _budgetTotalValue, _coin.c_str());
 
 			_budgetLabel->setText(budgetString);
+			_budgetSimpleGraphicConsumedBudgetLayout->setBackgroundColor(YELLOW);
+			_budgetSimpleGraphicTotalBudgetLayout->setBackgroundColor(GREEN);
 		}
 		else
 		{
@@ -317,7 +319,7 @@ namespace GUI
 		_debtBudget = value;
 	}
 
-	void HomeScreen::_updateValues()
+	void HomeScreen::updateValues()
 	{
 		_budgetTotalValue =  _observerReference->requestTotalBudget();
 		_budgetConsumedValue = _observerReference->requestConsumedBudget();

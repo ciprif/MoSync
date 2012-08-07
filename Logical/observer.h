@@ -69,6 +69,8 @@ namespace Logical
 
 		double requestCategoryAmount(const MAUtil::String& category);
 		void requestSaveSettings(bool isShowAll, bool isMonthly, bool isFromDate, const double& debtValue, const Model::DateStruct& date, const MAUtil::String& coin);
+
+		void requestClearTransactionList();
 	private:
 		void applySettings();
 		GUI::HomeScreen* _homeScreenReference;

@@ -12,7 +12,6 @@
 #include <NativeUI/ScreenListener.h>
 #include <NativeUI/ToggleButtonListener.h>
 #include <NativeUI/CheckBoxListener.h>
-#include <NativeUI/ButtonListener.h>
 #include <NativeUI/NumberPickerListener.h>
 #include <NativeUI/DatePickerListener.h>
 #include <NativeUI/ListViewListener.h>
@@ -38,7 +37,6 @@ namespace NativeUI
 	class CheckBox;
 	class VerticalLayout;
 	class HorizontalLayout;
-	class Button;
 	class ListView;
 	class ListViewItem;
 	class Label;
@@ -50,7 +48,7 @@ namespace NativeUI
 namespace GUI
 {
 	class SettingsScreen : public NativeUI::Screen, public NativeUI::ScreenListener, public NativeUI::CheckBoxListener,
-						   public NativeUI::ToggleButtonListener, public NativeUI::ButtonListener, public NativeUI::ListViewListener,
+						   public NativeUI::ToggleButtonListener, public NativeUI::ListViewListener,
 						   public NativeUI::DatePickerListener, public NativeUI::NumberPickerListener
 	{
 	public:
@@ -63,11 +61,12 @@ namespace GUI
 		void listViewItemClicked(NativeUI::ListView*, int index);
 		void listViewItemClicked(NativeUI::ListView*, NativeUI::ListViewItem*) {}
 		void optionsMenuClosed(NativeUI::Screen*) {}
-		void optionsMenuItemSelected(NativeUI::Screen*, int index) {}
+		void optionsMenuItemSelected(NativeUI::Screen*, int index);
 		void checkBoxStateChanged(NativeUI::CheckBox*, bool state);
 		void buttonClicked(NativeUI::Widget*);
 		void numberPickerValueChanged(NativeUI::NumberPicker*, int value);
 		void datePickerValueChanged(NativeUI::DatePicker*, const NativeUI::Date& selected);
+		void createOptionsMenu();
 	private:
 		void _createUI();
 		void _updateValues();
@@ -101,9 +100,6 @@ namespace GUI
 		NativeUI::DatePicker* _datePicker;
 		NativeUI::NumberPicker* _numberPicker;
 
-		NativeUI::Button* _apply;
-		NativeUI::Button* _reset;
-
 		int _itemWidth;
 
 		bool _isAllItems;
@@ -111,6 +107,9 @@ namespace GUI
 		bool _isFromDate;
 
 		int _dayValue;
+
+		int _saveButtonIndex;
+		int _restoreButtonIndex;
 	};
 }
 

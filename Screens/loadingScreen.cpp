@@ -23,6 +23,7 @@ namespace GUI
 
 		NativeUI::VerticalLayout* spacer1;
 		NativeUI::VerticalLayout* spacer2;
+		NativeUI::VerticalLayout* spacer3;
 
 		loading->setTextHorizontalAlignment(MAW_ALIGNMENT_CENTER);
 		loading->fillSpaceHorizontally();
@@ -34,9 +35,14 @@ namespace GUI
 		spacer2 = new NativeUI::VerticalLayout();
 		spacer2->fillSpaceVertically();
 
+		spacer3 = new NativeUI::VerticalLayout();
+		spacer3->setHeight(15);
+		spacer3->fillSpaceHorizontally();
+
 		mainLayout->addChild(spacer1);
-		mainLayout->addChild(loading);
 		mainLayout->addChild(activityIndicator);
+		mainLayout->addChild(spacer3);
+		mainLayout->addChild(loading);
 		mainLayout->addChild(spacer2);
 
 		activityIndicator->show();

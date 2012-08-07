@@ -410,9 +410,15 @@ namespace GUI
 			NativeUI::CheckBox* cb = *it;
 			cb->setState(false);
 		}
+
+		it = checkBoxVector->begin();
+		(*it)->setState(true);
+
 		_amountSliderThousands->setValue(0);
 		_amountSliderUnits->setValue(0);
+
 		_descriptionToggleButton->setCheckedState(false);
+		_transactionInformationToggleButton->setCheckedState(false);
 
 		_descriptionBoxParent->removeChild(_descriptionEditBox);
 		_descriptionEditBox->setText("");
