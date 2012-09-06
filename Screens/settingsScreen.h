@@ -10,7 +10,7 @@
 
 #include <NativeUI/Screen.h>
 #include <NativeUI/ScreenListener.h>
-#include <NativeUI/ToggleButtonListener.h>
+#include <NativeUI/ButtonListener.h>
 #include <NativeUI/CheckBoxListener.h>
 #include <NativeUI/NumberPickerListener.h>
 #include <NativeUI/DatePickerListener.h>
@@ -33,7 +33,7 @@ const MAUtil::String COINS[] = { "EUR", "USD", "GBP", "CAD", "AUD", "JPY", "INR"
 
 namespace NativeUI
 {
-	class ToggleButton;
+	class Button;
 	class CheckBox;
 	class VerticalLayout;
 	class HorizontalLayout;
@@ -48,7 +48,7 @@ namespace NativeUI
 namespace GUI
 {
 	class SettingsScreen : public NativeUI::Screen, public NativeUI::ScreenListener, public NativeUI::CheckBoxListener,
-						   public NativeUI::ToggleButtonListener, public NativeUI::ListViewListener,
+						   public NativeUI::ButtonListener, public NativeUI::ListViewListener,
 						   public NativeUI::DatePickerListener, public NativeUI::NumberPickerListener
 	{
 	public:
@@ -57,13 +57,12 @@ namespace GUI
 
 		void setObserver(Logical::Observer*);
 
-		void toggleButtonStateChanged(NativeUI::ToggleButton*, bool state);
+		void buttonClicked(NativeUI::Widget*);
 		void listViewItemClicked(NativeUI::ListView*, int index);
 		void listViewItemClicked(NativeUI::ListView*, NativeUI::ListViewItem*) {}
 		void optionsMenuClosed(NativeUI::Screen*) {}
 		void optionsMenuItemSelected(NativeUI::Screen*, int index);
 		void checkBoxStateChanged(NativeUI::CheckBox*, bool state);
-		void buttonClicked(NativeUI::Widget*);
 		void numberPickerValueChanged(NativeUI::NumberPicker*, int value);
 		void datePickerValueChanged(NativeUI::DatePicker*, const NativeUI::Date& selected);
 		void createOptionsMenu();
@@ -82,7 +81,7 @@ namespace GUI
 
 		NativeUI::Label* _debtValueLabel;
 		NativeUI::Label* _coinLabel;
-		NativeUI::ToggleButton* _coinChangeToggle;
+		NativeUI::Button* _coinChangeToggle;
 
 		NativeUI::VerticalLayout* _coinSettingsLayout;
 		NativeUI::VerticalLayout* _transactionSettingsLayout;

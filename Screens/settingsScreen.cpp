@@ -80,10 +80,12 @@ namespace GUI
 
 		NativeUI::VerticalLayout* toggleAndLabelParent = new NativeUI::VerticalLayout();
 
-		_coinChangeToggle = new NativeUI::ToggleButton();
+		_coinChangeToggle = new NativeUI::Button();
+		_coinChangeToggle->setText("Change coin");
 		_coinChangeToggle->setWidth(_itemWidth);
-		_coinChangeToggle->setCheckedState(false);
-		_coinChangeToggle->addToggleButtonListener(this);
+//		_coinChangeToggle->setCheckedState(false);
+//		_coinChangeToggle->addToggleButtonListener(this);
+		_coinChangeToggle->addButtonListener(this);
 
 		toggleAndLabelParent->addChild(_coinLabel);
 		toggleAndLabelParent->addChild(_coinChangeToggle);
@@ -249,20 +251,12 @@ namespace GUI
 		_updateValues();
 	}
 
-	void SettingsScreen::toggleButtonStateChanged(NativeUI::ToggleButton* b, bool state)
+	void SettingsScreen::buttonClicked(NativeUI::Widget* b)
 	{
 		if(b == _coinChangeToggle)
 		{
-			if(true == state)
-			{
-				_coinSettingsLayout->addChild(_coinsList);
-				_coinsList->addListViewListener(this);
-			}
-			else
-			{
-				_coinSettingsLayout->removeChild(_coinsList);
-				_coinsList->removeListViewListener(this);
-			}
+			_coinSettingsLayout->addChild(_coinsList);
+			_coinsList->addListViewListener(this);
 		}
 	}
 
@@ -279,7 +273,9 @@ namespace GUI
 
 			_coinSettingsLayout->removeChild(_coinsList);
 			_coinsList->removeListViewListener(this);
-			_coinChangeToggle->setCheckedState(false);
+
+			_coinSettingsLayout->removeChild(_coinsList);
+			_coinsList->removeListViewListener(this);
 		}
 	}
 
