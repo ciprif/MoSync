@@ -210,7 +210,6 @@ static NSString* kReuseIdentifier = @"Cell";
 @synthesize deleteButtonTitle = _deleteButtonTitle;
 @synthesize editingStyle = _editingStyle;
 @synthesize editable = _canEdit;
-@synthesize canMove = _canMove;
 
 /**
  * Init function.
@@ -438,6 +437,15 @@ static NSString* kReuseIdentifier = @"Cell";
     {
         IWidget* child = [_children objectAtIndex:0];
         size = child.size;
+    }
+    else
+    {
+        // Fix for MOSYNC-2560.
+        // The system resizes the cell's height after loading it, so if
+        // the table loads the same cell for many times its height increases.
+        // Setting the item's height with the rowHeight value from the table view will
+        // prevent that from happening.
+        size.height = [_delegate tableViewSectionRowHeight];
     }
     return  size;
 }
@@ -870,10 +878,11 @@ static NSString* kReuseIdentifier = @"Cell";
             returnValue = MAW_RES_INVALID_PROPERTY_VALUE;
             break;
     }
-    if (returnValue != MAW_RES_OK)
+    if (returnValue == MAW_RES_OK)
     {
         self.editingStyle = style;
     }
+
     return returnValue;
 }
 
