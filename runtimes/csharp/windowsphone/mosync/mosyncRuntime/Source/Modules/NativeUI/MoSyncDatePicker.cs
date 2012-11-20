@@ -69,7 +69,7 @@ namespace MoSync
                 mUriString.MaxDate = mMaxDate;
                 mUriString.MinDate = mMinDate;
 
-                mDatePicker.PickerPageUri = new Uri(mUriString.UriString, UriKind.Relative);
+                //mDatePicker.PickerPageUri = new Uri(mUriString.UriString, UriKind.Relative);
 
                 // The ValueChanged event handler. This is when the MoSync event is triggered.
                 mDatePicker.ValueChanged += new EventHandler<DateTimeValueChangedEventArgs>(

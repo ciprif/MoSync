@@ -496,10 +496,10 @@ namespace MoSync
             private void ApplyTemplatesOnLongListSelector()
             {
                 mLongListSelector.ItemTemplate = Application.Current.Resources["listItemTemplate"] as DataTemplate;
-                mLongListSelector.GroupItemTemplate = Application.Current.Resources["groupItemTemplate"] as DataTemplate;
+                //mLongListSelector.GroupItemTemplate = Application.Current.Resources["groupItemTemplate"] as DataTemplate;
                 mLongListSelector.GroupHeaderTemplate = Application.Current.Resources["groupHeaderTemplate"] as DataTemplate;
                 mLongListSelector.GroupFooterTemplate = Application.Current.Resources["groupFooterTemplate"] as DataTemplate;
-                mLongListSelector.GroupItemsPanel = Application.Current.Resources["groupHeaderItemsTemplate"] as ItemsPanelTemplate;
+                //mLongListSelector.GroupItemsPanel = Application.Current.Resources["groupHeaderItemsTemplate"] as ItemsPanelTemplate;
             }
 
             /**
