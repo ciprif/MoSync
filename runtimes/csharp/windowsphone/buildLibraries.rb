@@ -21,8 +21,10 @@ require "../../../rules/mosync_util.rb"
 require "FileUtils"
 
 msbuildpath = "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe"
+vcvarsallpath = "\"c:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/vcvarsall.bat\""
 
 # build everything
+sh  "call #{vcvarsallpath} x86_arm"
 sh "#{msbuildpath} mosync/mosyncRuntime/mosyncRuntime.csproj"
 
 # build directory structure
