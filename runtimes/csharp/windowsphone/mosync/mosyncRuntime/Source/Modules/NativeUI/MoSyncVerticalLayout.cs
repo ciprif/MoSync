@@ -260,6 +260,8 @@ namespace MoSync
                         {
                             mGrid.Children.Remove(fw);
                             mGrid.Children.Remove(mStackPanels[widget.RowNumber - 1]);
+                            mStackPanels.RemoveAt(widget.RowNumber - 1);
+                            mGrid.RowDefinitions.RemoveAt(widget.RowNumber);
                         }
                     }
                     if (mGrid.Children.Contains(fw))
