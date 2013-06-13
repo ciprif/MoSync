@@ -40,6 +40,11 @@
     <ClInclude Include="..\ResourceSetLookup.h" />
     <ClInclude Include="..\VariantResourceLookup.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MAStd\WP8\MAStd_WP8.vcxproj">
+      <Project>{eeed04c3-fd4a-47d1-b918-edcbd5b122be}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ebfef6a2-57d7-4709-bf61-4244b8d75479}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -129,10 +134,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../;../../MAStd;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;MOSYNC_NATIVE;_CRT_SECURE_NO_DEPRECATE;__WINDOWS_PHONE_8_LIB__;__WINDOWS_PHONE_8__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +151,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;MOSYNC_NATIVE;_CRT_SECURE_NO_DEPRECATE;__WINDOWS_PHONE_8_LIB__;__WINDOWS_PHONE_8__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
