@@ -473,26 +473,32 @@ int main(int argc, char **argv) {
 #else
 				copyCmd = "cp -f ";
 #endif
-				if(strcmp(name.c_str(), ".") != 0 && strcmp(name.c_str(), "..") != 0 && name[0] != '.' &&
-					(strstr(name.c_str(), ".c") != NULL || strstr(name.c_str(), ".cpp") != NULL ||
-					strstr(name.c_str(), ".h") != NULL || strstr(name.c_str(), ".hpp") != NULL))
+				if(strcmp(name.c_str(), ".") != 0 && strcmp(name.c_str(), "..") != 0 && name[0] != '.')
 				{
-					copyCmd += "\"" + (currentPath + "\\" + name) + "\" \"" + outputDirPath;
-					string relativePath = currentPath.substr(mosyncProjectPath.length(), currentPath.length() - mosyncProjectPath.length());
-					copyCmd += relativePath + "\\" + name + "\"";
+					char* extension = strstr(name.c_str(), ".");
 
-					system(("mkdir \"" + outputDirPath + relativePath + "\"").c_str());
-					int r = system(copyCmd.c_str());
-					if(r) {
-						printf("Command failed: %s %i\n", copyCmd.c_str(), r);
-						exit(r);
-					}
-
-					if(strstr(name.c_str(), ".h") == NULL && strstr(name.c_str(), ".hpp") == NULL)
+					if( strcmp(extension, ".c") == 0 || strcmp(extension, ".cpp") == 0 ||
+						strcmp(extension, ".h") == 0 || strcmp(extension, ".hpp") == 0 ||
+						strcmp(extension, ".cc") == 0)
 					{
-						CppFileReference fileRef(outputDirPath + relativePath + "\\" + name);
-						cppFilesReferences.push_back(fileRef);
+						copyCmd += "\"" + (currentPath + "\\" + name) + "\" \"" + outputDirPath;
+						string relativePath = currentPath.substr(mosyncProjectPath.length(), currentPath.length() - mosyncProjectPath.length());
+						copyCmd += relativePath + "\\" + name + "\"";
+
+						system(("mkdir \"" + outputDirPath + relativePath + "\"").c_str());
+						int r = system(copyCmd.c_str());
+						if(r) {
+							printf("Command failed: %s %i\n", copyCmd.c_str(), r);
+							exit(r);
+						}
+
+						if(strstr(name.c_str(), ".h") == NULL && strstr(name.c_str(), ".hpp") == NULL)
+						{
+							CppFileReference fileRef(outputDirPath + relativePath + "\\" + name);
+							cppFilesReferences.push_back(fileRef);
+						}
 					}
+					delete extension;
 				}
 				else if(name[0] != '.' && strcmp(name.c_str(), "Output") != 0 && strcmp(name.c_str(), "ReleasePackages") != 0)
 				{
