@@ -69,7 +69,11 @@ namespace Wormhole
 		for (int i = 0; i < size; ++i)
 		{
 			const char* ext2 = sMimeTypeDictionary[i][0];
+#ifdef __WINDOWS_PHONE_8__
+			if (0 == _stricmp(ext, ext2))
+#else
 			if (0 == stricmp(ext, ext2))
+#endif
 			{
 				return sMimeTypeDictionary[i][1];
 			}
