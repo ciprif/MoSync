@@ -40,6 +40,9 @@
 
 #ifdef _MSC_VER
 #include <stdlib.h>
+#ifdef __WINDOWS_PHONE_8__
+#define itoa _itoa
+#endif
 #else
 
 #ifdef __cplusplus
