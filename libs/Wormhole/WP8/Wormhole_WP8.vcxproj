@@ -42,38 +42,6 @@
     <ClCompile Include="..\WebViewMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\CustomMoblet.h" />
-    <ClInclude Include="..\Encoder.h" />
-    <ClInclude Include="..\FileUtil.h" />
-    <ClInclude Include="..\FunTable.h" />
-    <ClInclude Include="..\HighLevelBinaryDownloader.h" />
-    <ClInclude Include="..\HighLevelHttpConnection.h" />
-    <ClInclude Include="..\HighLevelImageDownloader.h" />
-    <ClInclude Include="..\HighLevelTextDownloader.h" />
-    <ClInclude Include="..\HybridMoblet.h" />
-    <ClInclude Include="..\Libs\Extensions\ExtensionMessageHandler.h" />
-    <ClInclude Include="..\Libs\JSNativeUI\NativeUIMessageHandler.h" />
-    <ClInclude Include="..\Libs\JSNativeUI\ResourceMessageHandler.h" />
-    <ClInclude Include="..\Libs\JSONMessage.h" />
-    <ClInclude Include="..\Libs\Notification\PushNotificationManager.h" />
-    <ClInclude Include="..\Libs\Notification\TCPConnection.h" />
-    <ClInclude Include="..\Libs\Orientation\OrientationMessageHandler.h" />
-    <ClInclude Include="..\Libs\PhoneGap\MimeTypes.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapCamera.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapCapture.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapFile.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapFileUtils.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapMessageHandler.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapSensors.h" />
-    <ClInclude Include="..\Libs\W3C\SensorManager.h" />
-    <ClInclude Include="..\MessageHandler.h" />
-    <ClInclude Include="..\MessageProtocol.h" />
-    <ClInclude Include="..\MessageStream.h" />
-    <ClInclude Include="..\MessageStreamJSON.h" />
-    <ClInclude Include="..\WebAppMoblet.h" />
-    <ClInclude Include="..\WebViewMessage.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\MAStd\WP8\MAStd_WP8.vcxproj">
       <Project>{eeed04c3-fd4a-47d1-b918-edcbd5b122be}</Project>
     </ProjectReference>
@@ -86,9 +54,6 @@
     <ProjectReference Include="..\..\yajl\WP8\yajl_WP8.vcxproj">
       <Project>{e8e93ee7-b75e-4bfe-bbd9-22aa7e69d8c2}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\workfile.rb" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{e0e62826-0317-4855-b4b6-fb5f85ce766a}</ProjectGuid>
@@ -135,7 +100,7 @@
       </PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../;../../MAStd;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../;../Libs;../Libs/JSNativeUI;../Libs/Notification;../Libs/Orientation;../Libs/PhoneGap;../Libs/W3C;../Libs/Extensions;../../MAStd</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;MOSYNC_NATIVE;_CRT_SECURE_NO_DEPRECATE;__WINDOWS_PHONE_8_LIB__;__WINDOWS_PHONE_8__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling />
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>

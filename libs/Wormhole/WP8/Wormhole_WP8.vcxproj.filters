@@ -37,39 +37,4 @@
     <ClCompile Include="..\Libs\Extensions\ExtensionMessageHandler.cpp" />
     <ClCompile Include="..\Libs\Orientation\OrientationMessageHandler.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\CustomMoblet.h" />
-    <ClInclude Include="..\Encoder.h" />
-    <ClInclude Include="..\FileUtil.h" />
-    <ClInclude Include="..\FunTable.h" />
-    <ClInclude Include="..\HighLevelBinaryDownloader.h" />
-    <ClInclude Include="..\HighLevelHttpConnection.h" />
-    <ClInclude Include="..\HighLevelImageDownloader.h" />
-    <ClInclude Include="..\HighLevelTextDownloader.h" />
-    <ClInclude Include="..\HybridMoblet.h" />
-    <ClInclude Include="..\MessageHandler.h" />
-    <ClInclude Include="..\MessageProtocol.h" />
-    <ClInclude Include="..\MessageStream.h" />
-    <ClInclude Include="..\MessageStreamJSON.h" />
-    <ClInclude Include="..\WebAppMoblet.h" />
-    <ClInclude Include="..\WebViewMessage.h" />
-    <ClInclude Include="..\Libs\JSNativeUI\NativeUIMessageHandler.h" />
-    <ClInclude Include="..\Libs\JSNativeUI\ResourceMessageHandler.h" />
-    <ClInclude Include="..\Libs\JSONMessage.h" />
-    <ClInclude Include="..\Libs\Notification\PushNotificationManager.h" />
-    <ClInclude Include="..\Libs\Notification\TCPConnection.h" />
-    <ClInclude Include="..\Libs\PhoneGap\MimeTypes.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapCamera.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapCapture.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapFile.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapMessageHandler.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapSensors.h" />
-    <ClInclude Include="..\Libs\W3C\SensorManager.h" />
-    <ClInclude Include="..\Libs\PhoneGap\PhoneGapFileUtils.h" />
-    <ClInclude Include="..\Libs\Extensions\ExtensionMessageHandler.h" />
-    <ClInclude Include="..\Libs\Orientation\OrientationMessageHandler.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\workfile.rb" />
-  </ItemGroup>
 </Project>
