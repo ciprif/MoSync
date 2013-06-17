@@ -46,7 +46,7 @@ var mosync = (function()
 		(navigator.userAgent.indexOf("iPad") != -1);
 
 	mosync.isWindowsPhone =
-		navigator.userAgent.indexOf("Windows Phone OS") != -1;
+		navigator.userAgent.indexOf("Windows Phone") != -1;
 
 	// Logging support.
 
